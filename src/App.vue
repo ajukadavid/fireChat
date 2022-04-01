@@ -24,8 +24,8 @@
       //messages
     </section>
     <footer>
-      <form @submit.prevent="">
-        <input type="text" placeholder="Write a message ..."/>
+      <form @submit.prevent="sendMessage">
+        <input type="text" v-model="inputMessage" placeholder="Write a message ..."/>
         <input type="submit" value="send">
       </form>
     </footer>
@@ -35,10 +35,12 @@
 <script>
 import { reactive, onMounted, ref} from 'vue'
 import  db from './db.js'
+
 export default {
   name: 'App',
   setup(){
     const inputUsername = ref('')
+    const inputMessage = ref('')
 
     const state = reactive({
       username: "",
@@ -51,10 +53,26 @@ export default {
       }
     }
 
+    const sendMessage = () => {
+      const messagesRef = db.database().ref("messages")
+      if (inputMessage.value === "" || inputMessage.value === null) {
+        return
+      }
+
+      const message = {
+        username: state.username,
+        content: inputMessage.value
+      }
+
+      messagesRef.push(message);
+      inputMessage.value = ""
+    }
     return {
       inputUsername,
+      inputMessage,
       login,
-      state
+      state,
+      sendMessage
     }
   }
 }

@@ -1,5 +1,5 @@
-import { initializeApp } from 'firebase/app';
-import "firebase/database"
+import firebase from "firebase/app";
+import "firebase/database";
 
 const config = {
     //APIKeys
@@ -11,6 +11,6 @@ const config = {
     appId: "1:645038757756:web:b5124ebf7bc683338876f9"
 }
 
-const db = initializeApp(config)
 
-export default db
+const db = firebase.initializeApp(config);
+export default db;
