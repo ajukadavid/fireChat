@@ -1,26 +1,48 @@
 <template>
-  <div class="view login">
-    <form class="login-form">
+  <div class="view login" v-if="state.username === '' || state.username === 'null' ">
+    <form class="login-form" @submit.prevent="login">
       <div class="form-inner">
         <h1>Login to FireChat</h1>
         <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Please enter your username..." />
+        <input
+            type="text"
+            v-model="inputUsername"
+            id="username"
+            placeholder="Please enter your username..."
+        />
         <input type="submit" value="login" />
       </div>
     </form>
   </div>
 
-  <div class="view chat"></div>
+  <div class="view chat" v-else>
+    <h1>Chat View</h1>
+  </div>
 </template>
 
 <script>
+import { reactive, onMounted, ref} from 'vue'
 import  db from './db.js'
 export default {
   name: 'App',
   setup(){
+    const inputUsername = ref('')
+
+    const state = reactive({
+      username: "",
+      messages: []
+    })
+    const login = () => {
+      if(inputUsername.value !== "" || inputUsername.value !== null){
+        state.username = inputUsername.value
+        inputUsername.value = ""
+      }
+    }
 
     return {
-
+      inputUsername,
+      login,
+      state
     }
   }
 }
